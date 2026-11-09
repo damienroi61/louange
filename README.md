@@ -111,13 +111,14 @@ npm run dist:linux     # AppImage Linux
 
 ### Publier une nouvelle version
 
-L'installateur Windows est fabriqué automatiquement par GitHub (fichier `.github/workflows/windows.yml`) :
+L'installateur Windows est fabriqué automatiquement par GitHub, sur une vraie machine Windows (fichier `.github/workflows/windows.yml`) :
 
-1. Augmentez le numéro `version` dans `package.json` (par exemple `1.1.0`).
-2. Publiez une étiquette du même numéro : `git tag v1.1.0` puis `git push origin v1.1.0`.
-3. Après une dizaine de minutes, l'installateur apparaît dans **Releases**.
+1. Augmentez le numéro `version` dans `package.json` (par exemple `1.1.0`) et envoyez la modification sur GitHub.
+2. Sur la page du dépôt : **Releases** → **Draft a new release** (ou **Create a new release**).
+3. **Choose a tag** : tapez `v1.1.0`, puis cliquez sur « Create new tag ». Donnez un titre, puis cliquez sur **Publish release**.
+4. Après une dizaine de minutes, `Louange-Setup-v1.1.0.exe` apparaît dans la Release, section **Assets**. L'avancement est visible dans l'onglet **Actions**.
 
-Vous pouvez aussi lancer la fabrication à la main : onglet **Actions** → « Installateur Windows » → **Run workflow**. Les fichiers sont alors disponibles en bas de la page de l'exécution.
+Vous pouvez aussi lancer la fabrication sans Release : onglet **Actions** → « Installateur Windows » → **Run workflow**. Les fichiers sont alors disponibles en bas de la page de l'exécution.
 
 Tests de bout en bout (Playwright) : `npm run preview` dans un terminal, puis `node e2e/smoke.mjs http://localhost:4173/`.
 
