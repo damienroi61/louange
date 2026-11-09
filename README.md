@@ -8,9 +8,11 @@ Application de bureau pour **Windows**, macOS et Linux (Electron). Elle fonction
 
 ## Installation (Windows)
 
-1. Lancez **`Louange Setup 1.0.0.exe`** et suivez l'assistant.
+**Téléchargement :** sur la page GitHub du projet, ouvrez **Releases** (colonne de droite) et téléchargez le fichier **`Louange-Setup-v….exe`** de la dernière version.
+
+1. Lancez **`Louange-Setup-v….exe`** et suivez l'assistant.
    *Windows SmartScreen peut afficher « Windows a protégé votre ordinateur », car l'installateur n'est pas signé numériquement. Cliquez alors sur « Informations complémentaires », puis « Exécuter quand même ».*
-2. Version sans installation : décompressez **`Louange-1.0.0-win.zip`** et lancez `Louange.exe`.
+2. Version sans installation : décompressez **`Louange-…-win.zip`** et lancez `Louange.exe`.
 
 Les données (chants, médias, programmes…) sont enregistrées dans le profil de l'utilisateur Windows. Pour les transférer sur un autre ordinateur, utilisez **Paramètres → Sauvegarde**.
 
@@ -106,6 +108,16 @@ npm run dist:win       # installateur Windows → release/
 npm run dist:mac       # macOS (à lancer sur un Mac)
 npm run dist:linux     # AppImage Linux
 ```
+
+### Publier une nouvelle version
+
+L'installateur Windows est fabriqué automatiquement par GitHub (fichier `.github/workflows/windows.yml`) :
+
+1. Augmentez le numéro `version` dans `package.json` (par exemple `1.1.0`).
+2. Publiez une étiquette du même numéro : `git tag v1.1.0` puis `git push origin v1.1.0`.
+3. Après une dizaine de minutes, l'installateur apparaît dans **Releases**.
+
+Vous pouvez aussi lancer la fabrication à la main : onglet **Actions** → « Installateur Windows » → **Run workflow**. Les fichiers sont alors disponibles en bas de la page de l'exécution.
 
 Tests de bout en bout (Playwright) : `npm run preview` dans un terminal, puis `node e2e/smoke.mjs http://localhost:4173/`.
 

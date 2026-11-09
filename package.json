@@ -37,12 +37,14 @@
         "nsis",
         "zip"
       ],
-      "icon": "build/icon.png"
+      "icon": "build/icon.png",
+      "artifactName": "Louange-${version}-win.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "shortcutName": "Louange"
+      "shortcutName": "Louange",
+      "artifactName": "Louange-Setup-v${version}.${ext}"
     },
     "mac": {
       "target": [
