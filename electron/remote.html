@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#12141a" />
+    <title>Louange — Télécommande</title>
+    <style>
+      :root {
+        --bg: #12141a;
+        --panel: #1c2029;
+        --line: #2e3443;
+        --text: #e8ebf2;
+        --muted: #8c94a8;
+        --accent: #e0b04a;
+        --live: #e5484d;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      header b {
+        color: var(--accent);
+      }
+      .tabs {
+        margin-left: auto;
+        display: flex;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .tabs button {
+        background: none;
+        border: 0;
+        color: var(--muted);
+        padding: 6px 12px;
+        font: inherit;
+      }
+      .tabs button.on {
+        background: var(--accent);
+        color: #1d1606;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .current {
+        white-space: pre-wrap;
+        font-size: 20px;
+        font-weight: 600;
+        min-height: 3em;
+      }
+      .next {
+        white-space: pre-wrap;
+        color: var(--muted);
+      }
+      .nav {
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .nav button,
+      .tog button {
+        font: 600 20px system-ui, sans-serif;
+        padding: 22px 0;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: #262c3a;
+        color: var(--text);
+      }
+      .nav .go {
+        background: var(--accent);
+        color: #1d1606;
+        border-color: var(--accent);
+      }
+      .tog {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .tog button {
+        font-size: 15px;
+        padding: 12px 0;
+      }
+      .tog button.on {
+        background: #4a1f22;
+        border-color: var(--live);
+      }
+      .list div {
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      .list div.on {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .list small {
+        color: var(--muted);
+        display: block;
+      }
+      .stage {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        padding: 16px;
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .stage.show {
+        display: flex;
+      }
+      .stage .now {
+        flex: 3;
+        font-size: 7vw;
+        font-weight: 700;
+        white-space: pre-wrap;
+        overflow: hidden;
+      }
+      .stage .nx {
+        flex: 1;
+        color: #999;
+        font-size: 4.5vw;
+        white-space: pre-wrap;
+        overflow: hidden;
+        border-top: 1px solid #333;
+        padding-top: 8px;
+      }
+      .stage .top {
+        display: flex;
+        justify-content: space-between;
+        color: #9fd0ff;
+        font-size: 5vw;
+      }
+      .msg {
+        background: #f3c96b;
+        color: #1a1400;
+        font-weight: 700;
+        padding: 8px;
+        border-radius: 8px;
+        text-align: center;
+      }
+      #status {
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <b>✦ Louange</b>
+      <span id="status">connexion…</span>
+      <div class="tabs">
+        <button id="t-remote" class="on">Commande</button>
+        <button id="t-stage">Scène</button>
+      </div>
+    </header>
+    <div class="card">
+      <div class="label" id="item">—</div>
+      <div class="current" id="current"></div>
+      <div class="label" style="margin-top: 8px">Suivant</div>
+      <div class="next" id="next"></div>
+    </div>
+    <div class="nav">
+      <button data-a="prev">◀ Préc.</button>
+      <button data-a="next" class="go">Suivant ▶</button>
+    </div>
+    <div class="tog">
+      <button data-a="black" id="b-black">Noir</button>
+      <button data-a="logo" id="b-logo">Logo</button>
+      <button data-a="clear" id="b-clear">Sans texte</button>
+    </div>
+    <div class="card">
+      <div class="label">Diapositives</div>
+      <div class="list" id="slides"></div>
+    </div>
+    <div class="card">
+      <div class="label" id="sname">Programme</div>
+      <div class="list" id="schedule"></div>
+    </div>
+    <div class="stage" id="stage">
+      <div class="top"><span id="clock"></span><span id="s-item"></span></div>
+      <div class="msg" id="s-msg" style="display: none"></div>
+      <div class="now" id="s-now"></div>
+      <div class="nx" id="s-next"></div>
+    </div>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      let pin = localStorage.getItem('louange-pin') || '';
+      let es;
+      const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+      function cmd(body) {
+        fetch('/api/cmd?pin=' + encodeURIComponent(pin), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      }
+      document.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => cmd({ action: b.dataset.a })));
+
+      function render(s) {
+        $('item').textContent = s.itemTitle || '—';
+        $('current').textContent = s.current || '';
+        $('next').textContent = s.next || '';
+        $('b-black').classList.toggle('on', !!s.black);
+        $('b-logo').classList.toggle('on', !!s.logo);
+        $('b-clear').classList.toggle('on', !!s.clearText);
+        $('sname').textContent = s.scheduleName || 'Programme';
+        $('slides').innerHTML = (s.slides || [])
+          .map((sl, i) => `<div data-slide="${i}" class="${i === s.liveIndex ? 'on' : ''}">${i + 1}. ${esc(sl.label)}<small>${esc((sl.text || '').split('\n')[0])}</small></div>`)
+          .join('');
+        $('schedule').innerHTML = (s.schedule || []).map((it, i) => `<div data-item="${i}" class="${i === s.liveItem ? 'on' : ''}">${esc(it.title)}</div>`).join('');
+        $('s-item').textContent = s.itemTitle || '';
+        $('s-now').textContent = s.current || '';
+        $('s-next').textContent = s.next || '';
+        $('s-msg').style.display = s.stageMessage ? 'block' : 'none';
+        $('s-msg').textContent = s.stageMessage || '';
+      }
+      $('slides').addEventListener('click', (e) => {
+        const d = e.target.closest('[data-slide]');
+        if (d) cmd({ action: 'goto', slide: Number(d.dataset.slide) });
+      });
+      $('schedule').addEventListener('click', (e) => {
+        const d = e.target.closest('[data-item]');
+        if (d) cmd({ action: 'gotoItem', item: Number(d.dataset.item) });
+      });
+      $('t-stage').onclick = () => {
+        $('stage').classList.add('show');
+        $('t-stage').classList.add('on');
+        $('t-remote').classList.remove('on');
+      };
+      $('stage').onclick = () => {
+        $('stage').classList.remove('show');
+        $('t-remote').classList.add('on');
+        $('t-stage').classList.remove('on');
+      };
+      setInterval(() => ($('clock').textContent = new Date().toLocaleTimeString('fr-FR')), 1000);
+
+      async function connect() {
+        const r = await fetch('/api/state?pin=' + encodeURIComponent(pin)).catch(() => null);
+        if (r && r.status === 401) {
+          pin = prompt('Code PIN de la télécommande') || '';
+          localStorage.setItem('louange-pin', pin);
+          return setTimeout(connect, 100);
+        }
+        es && es.close();
+        es = new EventSource('/api/events?pin=' + encodeURIComponent(pin));
+        es.onopen = () => ($('status').textContent = 'connecté');
+        es.onmessage = (e) => render(JSON.parse(e.data));
+        es.onerror = () => {
+          $('status').textContent = 'reconnexion…';
+        };
+      }
+      connect();
+    </script>
+  </body>
+</html>
