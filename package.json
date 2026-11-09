@@ -62,13 +62,6 @@
     },
     "publish": null
   },
-  "dependencies": {
-    "jszip": "^3.10.2",
-    "pdfjs-dist": "^4.10.38",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zustand": "^4.5.7"
-  },
   "devDependencies": {
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
@@ -76,9 +69,14 @@
     "electron": "^33.4.11",
     "electron-builder": "^25.1.8",
     "jsdom": "^25.0.1",
+    "jszip": "^3.10.2",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5.9.3",
     "vite": "^5.4.21",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "zustand": "^4.5.7"
   },
   "type": "module"
 }
